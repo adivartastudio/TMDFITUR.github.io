@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trans Metro Dewata - Rewards</title>
+    <style>
+        :root {
+            --primary-red: #E63946;
+            --white: #FFFFFF;
+            --light-gray: #F1F1F1;
+            --dark-text: #1D3557;
+            --accent-green: #2A9D8F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 414px;
+            background-color: var(--white);
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding-bottom: 80px;
+        }
+
+        header {
+            background-color: var(--primary-red);
+            color: var(--white);
+            padding: 25px 20px;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            text-align: center;
+        }
+
+        header h1 { font-size: 1.2rem; margin-bottom: 5px; }
+        header p { font-size: 0.8rem; opacity: 0.9; }
+
+        .point-card {
+            background: var(--white);
+            margin: -30px 20px 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .point-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-red);
+        }
+
+        .point-label { color: var(--dark-text); font-weight: 600; margin-bottom: 15px; }
+
+        .progress-container {
+            background: #eee;
+            border-radius: 10px;
+            height: 12px;
+            width: 100%;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--primary-red);
+            height: 100%;
+            width: 100%; /* Full 5/5 */
+            transition: width 0.3s ease;
+        }
+
+        .history-section { padding: 0 20px; }
+        .history-section h3 { margin-bottom: 15px; color: var(--dark-text); font-size: 1rem; }
+
+        .trip-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 5px solid var(--primary-red);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .trip-item:active { transform: scale(0.98); background: #f0f0f0; }
+
+        .trip-info h4 { font-size: 0.9rem; color: var(--dark-text); }
+        .trip-info p { font-size: 0.75rem; color: #666; }
+        .point-plus { color: var(--accent-green); font-weight: bold; }
+
+        .redeem-btn {
+            display: block;
+            width: 90%;
+            margin: 20px auto;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--primary-red);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+        }
+
+        /* MODAL / POPUP STYLE */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 85%;
+            max-width: 350px;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-content h2 { color: var(--primary-red); margin-bottom: 10px; }
+        .modal-content p { font-size: 0.9rem; color: #555; line-height: 1.5; }
+        
+        .voucher-box {
+            border: 2px dashed var(--primary-red);
+            padding: 15px;
+            margin: 15px 0;
+            background: #fff5f5;
+        }
+
+        .close-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: var(--dark-text);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .download-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .nav-bar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-container">
+        <header>
+            <p>Selamat Datang,</p>
+            <h1>Gede Danu</h1>
+        </header>
+
+        <div class="point-card">
+            <p class="point-label">Koleksi Poin Kamu</p>
+            <div class="point-value">5 / 5</div>
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+            <p style="font-size: 0.7rem; color: var(--accent-green); font-weight: bold;">Selamat! Poin kamu sudah cukup.</p>
+        </div>
+
+        <div class="history-section">
+            <h3>Catatan Perjalanan (Klik untuk Detail)</h3>
+            
+            <div class="trip-item" onclick="showDetail('Koridor 2', 'GOR Ngurah Rai - Bandara', '06 Feb 2024', '08:30', 'Bus ID: TMD-001')">
+                <div class="trip-info">
+                    <h4>Koridor 2: GOR Ngurah Rai - Bandara</h4>
+                    <p>06 Feb 2024 • 08:30 WITA</p>
+                </div>
+                <div class="point-plus">+1 Poin</div>
+            </div>
+
+            <div class="trip-item" onclick="showDetail('Koridor 1', 'Sentral Parkir - Ubung', '05 Feb 2024', '17:15', 'Bus ID: TMD-042')">
+                <div class="trip-info">
+                    <h4>Koridor 1: Sentral Parkir - Ubung</h4>
+                    <p>05 Feb 2024 • 17:15 WITA</p>
+                </div>
+                <div class="point-plus">+1 Poin</div>
+            </div>
+
+            <div class="trip-item" onclick="showDetail('Koridor 3', 'Ubung - Sanur', '04 Feb 2024', '10:00', 'Bus ID: TMD-015')">
+                <div class="trip-info">
+                    <h4>Koridor 3: Ubung - Sanur</h4>
+                    <p>04 Feb 2024 • 10:00 WITA</p>
+                </div>
+                <div class="point-plus">+1 Poin</div>
+            </div>
+
+            <div class="trip-item" onclick="showDetail('Koridor 2', 'Bandara - GOR Ngurah Rai', '03 Feb 2024', '19:00', 'Bus ID: TMD-005')">
+                <div class="trip-info">
+                    <h4>Koridor 2: Bandara - GOR Ngurah Rai</h4>
+                    <p>03 Feb 2024 • 19:00 WITA</p>
+                </div>
+                <div class="point-plus">+1 Poin</div>
+            </div>
+
+            <div class="trip-item" onclick="showDetail('Koridor 1', 'Ubung - Sentral Parkir', '02 Feb 2024', '07:45', 'Bus ID: TMD-022')">
+                <div class="trip-info">
+                    <h4>Koridor 1: Ubung - Sentral Parkir</h4>
+                    <p>02 Feb 2024 • 07:45 WITA</p>
+                </div>
+                <div class="point-plus">+1 Poin</div>
+            </div>
+        </div>
+
+        <button class="redeem-btn" id="btnTukar" onclick="showVoucher()">Tukar Jadi Voucher</button>
+
+        <div class="nav-bar">
+            <span>🏠</span>
+            <span style="color: var(--primary-red); font-weight: bold;">●</span>
+            <span>👤</span>
+        </div>
+    </div>
+
+    <div id="modalDetail" class="modal">
+        <div class="modal-content">
+            <h2 id="detKoridor">Detail Perjalanan</h2>
+            <hr><br>
+            <p><strong id="detRute"></strong></p>
+            <p id="detWaktu"></p>
+            <p id="detBus"></p>
+            <p style="margin-top:10px; color: var(--accent-green);">Status: Berhasil mendapatkan 1 poin</p>
+            <button class="close-btn" onclick="closeModal('modalDetail')">Tutup</button>
+        </div>
+    </div>
+
+    <div id="modalVoucher" class="modal">
+        <div class="modal-content">
+            <h2>🎉 Voucher Kamu!</h2>
+            <p>Berhasil ditukarkan dari 5 poin perjalanan.</p>
+            <div class="voucher-box">
+                <h3 style="color: var(--primary-red);">KODE: DEWATAREWARDS</h3>
+                <hr style="margin: 10px 0; border: 0.5px solid #ccc;">
+                <p><strong>Pilih Salah Satu Benefit:</strong></p>
+                <ul style="text-align: left; font-size: 0.8rem; margin: 10px 0 0 20px;">
+                    <li>Diskon 50% di Coffee Shop Mitra</li>
+                    <li>Potongan Rp10rb di Toko Buku</li>
+                    <li>1x Gratis Biaya Perjalanan</li>
+                </ul>
+            </div>
+            <button class="download-btn" onclick="alert('Voucher berhasil diunduh ke Galeri!')">UNDUH VOUCHER (PNG)</button>
+            <button class="close-btn" onclick="closeModal('modalVoucher')">Nanti Saja</button>
+        </div>
+    </div>
+
+    <script>
+        function showDetail(koridor, rute, tgl, jam, bus) {
+            document.getElementById('detKoridor').innerText = koridor;
+            document.getElementById('detRute').innerText = rute;
+            document.getElementById('detWaktu').innerText = tgl + " | " + jam + " WITA";
+            document.getElementById('detBus').innerText = bus;
+            document.getElementById('modalDetail').style.display = 'flex';
+        }
+
+        function showVoucher() {
+            document.getElementById('modalVoucher').style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
